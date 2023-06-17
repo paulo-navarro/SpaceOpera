@@ -1,0 +1,15 @@
+{
+  "name": "Free Movement",
+  "rows": 6,
+  "cols": 6,
+  "pieceSize": "50px",
+  "pieceMoveRule": "free",
+  "board": [
+    ["rocket", "star", "ghost", "alien", "ghost", "bomb"],
+    ["bomb", "alien", "astronaut", "alien", "astronaut", "ghost"],
+    ["alien", "ghost", "bomb", "saturn", "pistol", "astronaut"],
+    ["star", "moon", "ghost", "alien", "ghost", "bomb"],
+    ["bomb", "alien", "astronaut", "rocket", "astronaut", "ghost"],
+    ["alien", "ghost", "bomb", "star", "alien", "astronaut"]
+  ]
+}
