@@ -1,5 +1,12 @@
 <template>
-  <svg class="Alien" viewBox="0 0 612 792">
+  <svg
+    class="Alien"
+    :class="[
+      {'Alien--match2': matchs === 2},
+      {'Alien--match3': matchs === 3}
+    ]"
+    viewBox="0 0 612 792"
+  >
     <g>
       <path
         d="M72.1,173.8c-30.1,0-54.5,24.5-54.5,54.5s24.5,54.5,54.5,54.5c20.9,0,39.7-11.8,48.8-30.3c23.3,4.2,33.8,25.2,38.2,39
@@ -24,6 +31,9 @@
 <script>
 export default {
   name: "AlienPiece",
+  props: {
+    matchs: Number
+  }
 };
 </script>
 
@@ -33,5 +43,12 @@ export default {
   height: 85%;
   padding: 8%;
   fill: rgb(66, 161, 66);
+
+  &--match2 {
+    fill: rgb(182, 211, 19);
+  }
+  &--match3 {
+    fill: rgb(235, 11, 11);
+  }
 }
 </style>

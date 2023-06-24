@@ -2,7 +2,7 @@
   <div class="MainBoard">
     <router-link :to="{ name: 'home' }"> ← back</router-link>
     <h1>Space Opera - {{ stage?.name }}</h1>
-    <div v-if="stage">
+    <div v-if="stage && board">
       <div class="MainBoard-row" v-for="rowIndex in stage.rows" :key="rowIndex">
         <div
           class="MainBoard-col"
@@ -30,7 +30,8 @@
             :style="{
               transition: `all ${switchMoveDuration}ms`,
             }"
-            :is="`${stage.board[rowIndex - 1][colIndex - 1]}`"
+            :matchs="board[rowIndex - 1][colIndex - 1]?.matchs"
+            :is="`${board[rowIndex - 1][colIndex - 1]?.value}`"
             @click="selectPiece(rowIndex - 1, colIndex - 1)"
           />
         </div>
@@ -82,8 +83,9 @@ export default {
 
   mounted() {
     if (this.$route?.params?.stage) {
-      this.stage = this.stages[parseInt(this.$route?.params?.stage, 10) - 1];
-      this.board = this.getBoard();
+      this.stage = this.stages[parseInt(this.$route?.params?.stage, 10) - 1]
+      this.board = this.getBoard()
+      this.countAllMatchs()
     }
   },
 
@@ -98,64 +100,66 @@ export default {
       };
     },
     getBoard() {
-      let board = [];
+      let board = []
       this.stage.board.forEach((row, rowIndex) => {
-        let newRow = [];
+        let newRow = []
         row.forEach((col, colIndex) => {
           newRow.push(this.getPieceObject(rowIndex, colIndex));
         });
-        board.push(newRow);
+        board.push(newRow)
       });
-      console.log(this.board, this.stage.board);
-      return board;
+
+      return board
     },
+
     selectPiece(rowIndex, colIndex) {
-      const isFirstOne = this.selectPiece1(rowIndex, colIndex);
+      const isFirstOne = this.selectPiece1(rowIndex, colIndex)
 
       if (!isFirstOne) {
-        this.selectPiece2(rowIndex, colIndex);
+        this.selectPiece2(rowIndex, colIndex)
       }
     },
+
     selectPiece1(rowIndex, colIndex) {
       if (this.piece1 === null) {
-        this.piece1 = this.getPieceObject(rowIndex, colIndex);
+        this.piece1 = this.cloneObject(this.board[rowIndex][colIndex])
 
-        return true;
+        return true
       }
       if (this.piece1.row === rowIndex && this.piece1.col === colIndex) {
-        this.piece1 = null;
+        this.piece1 = null
 
-        return true;
+        return true
       }
 
-      return false;
+      return false
     },
     selectPiece2(rowIndex, colIndex) {
-      const pieceObj = this.getPieceObject(rowIndex, colIndex);
+      const pieceObj = this.cloneObject(this.board[rowIndex][colIndex])
       if (this.piece2?.row === rowIndex && this.piece2?.col === colIndex) {
-        this.piece2 = null;
-        return;
+        this.piece2 = null
+        return
       }
       const moveDirection = this.pieceShoudMove(this.piece1, pieceObj);
       if (moveDirection) {
-        this.piece2 = pieceObj;
-        this.movePieces(moveDirection);
+        this.piece2 = pieceObj
+        this.movePieces(moveDirection)
       } else {
-        this.piece2 = null;
-        this.piece1 = pieceObj;
+        this.piece2 = null
+        this.piece1 = pieceObj
       }
     },
     pieceShoudMove(piece1, piece2) {
       if (piece1.row === piece2.row - 1 && piece1.col === piece2.col)
-        return "down";
+        return "down"
       if (piece1.row === piece2.row + 1 && piece1.col === piece2.col)
-        return "up";
+        return "up"
       if (piece1.col === piece2.col - 1 && piece1.row === piece2.row)
-        return "right";
+        return "right"
       if (piece1.col === piece2.col + 1 && piece1.row === piece2.row)
-        return "left";
+        return "left"
 
-      return null;
+      return null
     },
     movePieces(direction) {
       if (direction === "left") {
@@ -179,36 +183,38 @@ export default {
       if (this.stage.pieceMoveRule === "match2") this.moveRuleMatch(2);
     },
     switchPlaces() {
-      const piece1 = this.stage.board[this.piece1.row][this.piece1.col];
-      const piece2 = this.stage.board[this.piece2.row][this.piece2.col];
+      const piece1 = this.board[this.piece1.row][this.piece1.col].value;
+      const piece2 = this.board[this.piece2.row][this.piece2.col].value;
       this.rollbackPosition();
 
-      this.stage.board[this.piece1.row][this.piece1.col] = piece2;
-      this.stage.board[this.piece2.row][this.piece2.col] = piece1;
+      this.board[this.piece1.row][this.piece1.col].value = piece2;
+      this.board[this.piece2.row][this.piece2.col].value = piece1;
 
       this.piece1 = null;
       this.piece2 = null;
+
+      this.countAllMatchs()
     },
     moveRuleMatch(match) {
-      let tempBoard = JSON.parse(JSON.stringify(this.stage.board));
-      tempBoard[this.piece1.row][this.piece1.col] = this.piece2.value;
-      tempBoard[this.piece2.row][this.piece2.col] = this.piece1.value;
+      let tempBoard = this.cloneObject(this.board)
+      const piece1 = {...this.piece2, value: this.piece1.value}
+      const piece2 = {...this.piece1, value: this.piece2.value}
+      tempBoard[piece1.row][piece1.col] = piece1
+      tempBoard[piece2.row][piece2.col] = piece2
 
       const matchs1 = this.countMatches(
         tempBoard,
-        this.piece1.row,
-        this.piece1.col
-      );
+        piece1
+      )
       const matchs2 = this.countMatches(
         tempBoard,
-        this.piece2.row,
-        this.piece2.col
-      );
+        piece2
+      )
 
-      const haveMatch = matchs1 >= match || matchs2 >= match;
+      const haveMatch = matchs1 >= match || matchs2 >= match
       if (haveMatch) {
-        setTimeout(this.switchPlaces, this.switchMoveDuration);
-        return;
+        setTimeout(this.switchPlaces, this.switchMoveDuration)
+        return
       }
       setTimeout(() => {
         this.rollbackPosition();
@@ -216,35 +222,36 @@ export default {
         this.piece2 = null;
       }, this.switchMoveDuration);
     },
-    countMatches(board, row, col) {
+
+    countMatches(board, piece) {
       let rowMatchs = 1;
       let colMatchs = 1;
-      const value = board[row][col];
 
-      for (let i = col - 1; i >= 0; i--) {
-        if (value === board[row][i]) {
+      for (let i = piece.col - 1; i >= 0; i--) {
+        if (piece.value === board[piece.row][i].value) {
           rowMatchs++;
         } else {
           i = -1;
         }
       }
-      for (let i = col + 1; i < board[0].length; i++) {
-        if (value === board[row][i]) {
+
+      for (let i = piece.col + 1; i < board[0].length; i++) {
+        if (piece.value === board[piece.row][i].value) {
           rowMatchs++;
         } else {
           i = board[0].length + 1;
         }
       }
 
-      for (let i = row - 1; i >= 0; i--) {
-        if (value === board[i][col]) {
+      for (let i = piece.row - 1; i >= 0; i--) {
+        if (piece.value === board[i][piece.col].value) {
           colMatchs++;
         } else {
           i = -1;
         }
       }
-      for (let i = row + 1; i < board.length; i++) {
-        if (value === board[i][col]) {
+      for (let i = piece.row + 1; i < board[0].length; i++) {
+        if (piece.value === board[i][piece.col].value) {
           colMatchs++;
         } else {
           i = board.length + 1;
@@ -253,11 +260,23 @@ export default {
 
       return rowMatchs > colMatchs ? rowMatchs : colMatchs;
     },
+
+    countAllMatchs() {
+      this.board.forEach((row) => {
+        row.forEach((col) => {
+          col.matchs = this.countMatches(this.board, col)
+        })
+      })
+    },
+
     rollbackPosition() {
       this.moveUp = null;
       this.moveDown = null;
       this.moveLeft = null;
       this.moveRight = null;
+    },
+    cloneObject(obj){
+      return JSON.parse(JSON.stringify(obj))
     },
   },
 };

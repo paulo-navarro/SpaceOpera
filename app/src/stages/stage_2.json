@@ -1,15 +1,21 @@
 {
   "name": "Match2 Movement",
-  "rows": 6,
-  "cols": 6,
+  "rows": 12,
+  "cols": 12,
   "pieceSize": "50px",
   "pieceMoveRule": "match2",
   "board": [
-    ["rocket", "star", "ghost", "alien", "ghost", "bomb"],
-    ["bomb", "saturn", "astronaut", "rocket", "astronaut", "ghost"],
-    ["alien", "ghost", "bomb", "saturn", "pistol", "astronaut"],
-    ["star", "moon", "pistol", "alien", "ghost", "star"],
-    ["bomb", "saturn", "astronaut", "rocket", "astronaut", "moon"],
-    ["alien", "rocket", "moon", "star", "alien", "pistol"]
+    ["rocket", "star", "ghost", "alien", "ghost", "bomb","alien", "rocket", "moon", "star", "alien", "pistol"],
+    ["bomb", "saturn", "astronaut", "rocket", "astronaut", "ghost","rocket", "star", "ghost", "alien", "ghost", "bomb"],
+    ["alien", "ghost", "bomb", "saturn", "pistol", "astronaut","bomb", "saturn", "astronaut", "rocket", "astronaut", "rocket"],
+    ["star", "moon", "pistol", "alien", "ghost", "star","alien", "ghost", "bomb", "saturn", "pistol", "astronaut"],
+    ["bomb", "saturn", "astronaut", "rocket", "astronaut", "moon","alien", "ghost", "bomb", "saturn", "pistol", "astronaut"],
+    ["alien", "rocket", "moon", "star", "alien", "pistol","bomb", "saturn", "astronaut", "rocket", "astronaut", "moon"],
+    ["rocket", "star", "ghost", "alien", "ghost", "bomb","alien", "rocket", "moon", "star", "alien", "pistol"],
+    ["bomb", "saturn", "astronaut", "rocket", "astronaut", "ghost","rocket", "star", "ghost", "alien", "ghost", "bomb"],
+    ["alien", "ghost", "bomb", "saturn", "pistol", "astronaut","bomb", "saturn", "astronaut", "rocket", "astronaut", "moon"],
+    ["star", "moon", "pistol", "alien", "ghost", "star","alien", "ghost", "bomb", "saturn", "pistol", "astronaut"],
+    ["bomb", "saturn", "astronaut", "rocket", "astronaut", "moon","alien", "ghost", "bomb", "saturn", "pistol", "astronaut"],
+    ["alien", "rocket", "moon", "star", "alien", "pistol","bomb", "saturn", "astronaut", "rocket", "astronaut", "moon"]
   ]
 }
