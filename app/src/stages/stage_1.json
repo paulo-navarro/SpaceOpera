@@ -2,8 +2,9 @@
   "name": "Free Movement",
   "rows": 6,
   "cols": 6,
-  "pieceSize": "50px",
+  "pieceSize": 50,
   "pieceMoveRule": "free",
+  "pieceRemovalRule": "match3",
   "board": [
     ["rocket", "star", "ghost", "alien", "ghost", "bomb"],
     ["bomb", "alien", "astronaut", "alien", "astronaut", "ghost"],

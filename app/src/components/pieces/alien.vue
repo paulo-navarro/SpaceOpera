@@ -45,10 +45,10 @@ export default {
   fill: rgb(66, 161, 66);
 
   &--match2 {
-    fill: rgb(182, 211, 19);
+    fill: rgb(61, 185, 61);
   }
   &--match3 {
-    fill: rgb(235, 11, 11);
+    fill: rgb(136, 209, 53);
   }
 }
 </style>

@@ -2,9 +2,11 @@
   "name": "Match2 Movement",
   "rows": 12,
   "cols": 12,
-  "pieceSize": "50px",
+  "pieceSize": 50,
   "pieceMoveRule": "match2",
+  "pieceRemovalRule": "match3",
   "board": [
+    ["bomb", "saturn", "astronaut", "rocket", "astronaut", "ghost","rocket", "star", "ghost", "alien", "ghost", "bomb"],
     ["rocket", "star", "ghost", "alien", "ghost", "bomb","alien", "rocket", "moon", "star", "alien", "pistol"],
     ["bomb", "saturn", "astronaut", "rocket", "astronaut", "ghost","rocket", "star", "ghost", "alien", "ghost", "bomb"],
     ["alien", "ghost", "bomb", "saturn", "pistol", "astronaut","bomb", "saturn", "astronaut", "rocket", "astronaut", "rocket"],

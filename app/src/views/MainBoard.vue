@@ -11,6 +11,10 @@
               this.piece1?.id === `${rowIndex - 1}-${colIndex - 1}` ||
               this.piece2?.id === `${rowIndex - 1}-${colIndex - 1}`,
           }"
+          :style="{
+            'flex-basis': `${stage.pieceSize}px`,
+            'height': `${stage.pieceSize}px`,
+          }"
           v-for="colIndex in stage.cols"
           :key="colIndex"
           :ref="`${rowIndex - 1}-${colIndex - 1}`"
@@ -19,13 +23,13 @@
             class="MainBoard-piece"
             :class="{
               'MainBoard-piece--moveUp':
-                this.moveUp === `${rowIndex - 1}-${colIndex - 1}`,
+                this.moveUp.includes(`${rowIndex - 1}-${colIndex - 1}`),
               'MainBoard-piece--moveDown':
-                this.moveDown === `${rowIndex - 1}-${colIndex - 1}`,
+                this.moveDown.includes(`${rowIndex - 1}-${colIndex - 1}`),
               'MainBoard-piece--moveLeft':
-                this.moveLeft === `${rowIndex - 1}-${colIndex - 1}`,
+                this.moveLeft.includes(`${rowIndex - 1}-${colIndex - 1}`),
               'MainBoard-piece--moveRight':
-                this.moveRight === `${rowIndex - 1}-${colIndex - 1}`,
+                this.moveRight.includes(`${rowIndex - 1}-${colIndex - 1}`),
             }"
             :style="{
               transition: `all ${switchMoveDuration}ms`,
@@ -74,10 +78,10 @@ export default {
       piece1: null,
       piece2: null,
       switchMoveDuration: 200,
-      moveUp: null,
-      moveDown: null,
-      moveLeft: null,
-      moveRight: null,
+      moveUp: [],
+      moveDown: [],
+      moveLeft: [],
+      moveRight: [],
     };
   },
 
@@ -163,24 +167,82 @@ export default {
     },
     movePieces(direction) {
       if (direction === "left") {
-        this.moveLeft = this.piece1.id;
-        this.moveRight = this.piece2.id;
+        this.moveLeft.push(this.piece1.id)
+        this.moveRight.push(this.piece2.id)
       }
       if (direction === "right") {
-        this.moveRight = this.piece1.id;
-        this.moveLeft = this.piece2.id;
+        this.moveRight.push(this.piece1.id)
+        this.moveLeft.push(this.piece2.id)
       }
       if (direction === "up") {
-        this.moveUp = this.piece1.id;
-        this.moveDown = this.piece2.id;
+        this.moveUp.push(this.piece1.id)
+        this.moveDown.push(this.piece2.id)
       }
       if (direction === "down") {
-        this.moveDown = this.piece1.id;
-        this.moveUp = this.piece2.id;
+        this.moveDown.push(this.piece1.id)
+        this.moveUp.push(this.piece2.id)
       }
       if (this.stage.pieceMoveRule === "free")
         setTimeout(this.switchPlaces, this.switchMoveDuration);
       if (this.stage.pieceMoveRule === "match2") this.moveRuleMatch(2);
+    },
+    pullColumn (piece) {
+      const nextPiece = this.board[piece.row + 1][piece.col]
+      if (nextPiece.value === null) {
+        this.moveDown.push(piece.id)
+        console.log(this.moveDown)
+
+        for(let r = piece.row - 1; r > 0; r--) {
+          this.moveDown.push(this.board[r][piece.col].id)
+        }
+        setTimeout(() => {
+          console.log(piece.row, "outside")
+          nextPiece.value = piece.value
+          piece.value = null
+
+          this.moveDown = this.moveDown.filter(id => (id !== piece.id))
+          for(let r = piece.row - 1; r >= -1; r--) {
+            if (r === -1) {
+              this.board[0][piece.col].value = this.getRandomValue()
+            } else {
+              this.board[r + 1][piece.col].value = this.board[r][piece.col].value
+              this.moveDown = this.moveDown.filter(id => (id !== this.board[r][piece.col].id))
+            }
+          } 
+
+          if (this.board[nextPiece.row + 1][piece.col].value === null) {
+            setTimeout(()=> {
+              this.pullColumn(nextPiece)
+            }, 1)
+          }
+        }, this.switchMoveDuration);
+      }
+    },
+    getRandomValue() {
+      const row = Math.floor(Math.random() * this.board.length)
+      const col = Math.floor(Math.random() * this.board[0].length)
+      console.log(row, col)
+
+      return this.board[row][col].value
+    },
+    removePiecesMatching(amount) {
+      let removed = []
+      this.board.forEach((row) => {
+        row.forEach((piece) => {
+          if (piece.matchs >= amount) {
+            removed.push(piece)
+            this.board[piece.row][piece.col].value = null
+          }
+        })
+      })
+
+      if (removed.length > 0) {
+        removed.forEach(piece => {
+          if (this.board[piece.row - 1][piece.col].value !== null) {
+            this.pullColumn(this.board[piece.row - 1][piece.col])
+          }
+        })
+      }
     },
     switchPlaces() {
       const piece1 = this.board[this.piece1.row][this.piece1.col].value;
@@ -217,10 +279,10 @@ export default {
         return
       }
       setTimeout(() => {
-        this.rollbackPosition();
-        this.piece1 = null;
-        this.piece2 = null;
-      }, this.switchMoveDuration);
+        this.rollbackPosition()
+        this.piece1 = null
+        this.piece2 = null
+      }, this.switchMoveDuration)
     },
 
     countMatches(board, piece) {
@@ -267,13 +329,17 @@ export default {
           col.matchs = this.countMatches(this.board, col)
         })
       })
+      
+      if (this.stage.pieceRemovalRule === "match3") {
+        setTimeout(() => this.removePiecesMatching(3), this.switchMoveDuration)
+      }
     },
 
     rollbackPosition() {
-      this.moveUp = null;
-      this.moveDown = null;
-      this.moveLeft = null;
-      this.moveRight = null;
+      this.moveUp = []
+      this.moveDown = []
+      this.moveLeft = []
+      this.moveRight = []
     },
     cloneObject(obj){
       return JSON.parse(JSON.stringify(obj))
@@ -314,6 +380,7 @@ export default {
     }
     &--moveDown {
       top: 50px;
+      outline: 1px solid red;
       fill: purple;
     }
     &--moveLeft {
