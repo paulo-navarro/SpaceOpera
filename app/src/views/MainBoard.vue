@@ -186,63 +186,59 @@ export default {
         setTimeout(this.switchPlaces, this.switchMoveDuration);
       if (this.stage.pieceMoveRule === "match2") this.moveRuleMatch(2);
     },
-    pullColumn (piece) {
-      const nextPiece = this.board[piece.row + 1][piece.col]
-      if (nextPiece.value === null) {
-        this.moveDown.push(piece.id)
-        console.log(this.moveDown)
 
-        for(let r = piece.row - 1; r > 0; r--) {
-          this.moveDown.push(this.board[r][piece.col].id)
+    getColLastNullValPiece(col) {
+      for(let r = this.board.length - 1; r >= 0; r--) {
+        let piece = this.board[r][col]
+        if(piece.value === null) {
+          return piece
+        }
+      }
+      return null
+    },
+    pullColumn (col) {
+
+      const lastNullValPiece = this.getColLastNullValPiece(col)
+
+      if(lastNullValPiece !== null) {
+        for(let r = lastNullValPiece.row - 1; r >= 0; r--) {
+          this.moveDown.push(this.board[r][col].id)
         }
         setTimeout(() => {
-          console.log(piece.row, "outside")
-          nextPiece.value = piece.value
-          piece.value = null
-
-          this.moveDown = this.moveDown.filter(id => (id !== piece.id))
-          for(let r = piece.row - 1; r >= -1; r--) {
-            if (r === -1) {
-              this.board[0][piece.col].value = this.getRandomValue()
-            } else {
-              this.board[r + 1][piece.col].value = this.board[r][piece.col].value
-              this.moveDown = this.moveDown.filter(id => (id !== this.board[r][piece.col].id))
-            }
-          } 
-
-          if (this.board[nextPiece.row + 1][piece.col].value === null) {
-            setTimeout(()=> {
-              this.pullColumn(nextPiece)
-            }, 1)
+          for(let r = lastNullValPiece.row - 1; r >= 0; r--) {
+            this.board[r + 1][col].value = this.board[r][col].value
+            this.moveDown = this.moveDown.filter(id => (id !== this.board[r][col].id))
           }
+          this.board[0][col].value = this.getRandomValue()
+          setTimeout(()=> {
+              this.pullColumn(col)
+          }, 1)
         }, this.switchMoveDuration);
       }
     },
     getRandomValue() {
       const row = Math.floor(Math.random() * this.board.length)
       const col = Math.floor(Math.random() * this.board[0].length)
-      console.log(row, col)
 
       return this.board[row][col].value
     },
     removePiecesMatching(amount) {
       let removed = []
+      let cols = []
       this.board.forEach((row) => {
         row.forEach((piece) => {
           if (piece.matchs >= amount) {
+            piece.value = null
+            piece.matchs = 0
+            if (!cols.includes(piece.col)) {
+              cols.push(piece.col);
+            }
             removed.push(piece)
-            this.board[piece.row][piece.col].value = null
           }
         })
       })
 
-      if (removed.length > 0) {
-        removed.forEach(piece => {
-          if (this.board[piece.row - 1][piece.col].value !== null) {
-            this.pullColumn(this.board[piece.row - 1][piece.col])
-          }
-        })
-      }
+      cols.forEach(col => this.pullColumn(col))
     },
     switchPlaces() {
       const piece1 = this.board[this.piece1.row][this.piece1.col].value;
@@ -380,7 +376,6 @@ export default {
     }
     &--moveDown {
       top: 50px;
-      outline: 1px solid red;
       fill: purple;
     }
     &--moveLeft {
