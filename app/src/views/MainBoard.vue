@@ -214,6 +214,8 @@ export default {
               this.pullColumn(col)
           }, 1)
         }, this.switchMoveDuration);
+      } else {
+        this.countAllMatchs()
       }
     },
     getRandomValue() {
