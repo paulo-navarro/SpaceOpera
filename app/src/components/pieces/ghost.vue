@@ -1,5 +1,11 @@
 <template>
-  <svg class="Ghost" viewBox="0 0 64 64">
+  <svg
+    class="Ghost"
+    :class="[
+      {'Ghost--match2': matchs === 2},
+      {'Ghost--match3': matchs === 3}
+    ]"
+    viewBox="0 0 64 64">
     <g>
       <path
         d="M51.631,52.386c16.443,0.336,8.27-22.57,3.74-28.445S63.2,5.613,42.625,8.472c-20.575,2.859-22.114,15.839-19.034,29.88
@@ -17,6 +23,9 @@
 <script>
 export default {
   name: "GhostPiece",
+  props: {
+    matchs: Number
+  }
 };
 </script>
 
@@ -26,5 +35,14 @@ export default {
   height: 70%;
   padding: 20% 10%;
   fill: #3aabaf;
+
+  &--match2 {
+    fill: #a4dddf;
+    filter: drop-shadow(0 0px 3px rgb(255, 255, 255, 0.4));
+  }
+  &--match3 {
+    fill: #f7f9fa;
+    filter: drop-shadow(0 0px 3px rgb(255, 255, 255, 0.6));
+  }
 }
 </style>

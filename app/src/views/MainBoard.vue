@@ -360,7 +360,7 @@ export default {
     align-items: center;
     justify-content: center;
     height: 50px;
-    outline: 1px solid #f3f3f3;
+    outline: 1px solid #1a1919;
     cursor: pointer;
 
     &--selected {
@@ -374,19 +374,15 @@ export default {
 
     &--moveUp {
       top: -50px;
-      fill: purple;
     }
     &--moveDown {
       top: 50px;
-      fill: purple;
     }
     &--moveLeft {
       left: -50px;
-      fill: purple;
     }
     &--moveRight {
       left: 50px;
-      fill: purple;
     }
   }
 }

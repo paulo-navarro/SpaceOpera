@@ -42,13 +42,15 @@ export default {
   width: 85%;
   height: 85%;
   padding: 8%;
-  fill: rgb(66, 161, 66);
+  fill: rgb(35 140 35);
 
   &--match2 {
-    fill: rgb(61, 185, 61);
+    fill: rgb(28 181 28);
+    filter: drop-shadow(0 0px 3px rgb(255, 255, 255, 0.4));
   }
   &--match3 {
-    fill: rgb(136, 209, 53);
+    fill: rgb(141, 224, 46);
+    filter: drop-shadow(0 0px 3px rgb(255, 255, 255, 0.6));
   }
 }
 </style>
