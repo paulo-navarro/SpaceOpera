@@ -42,7 +42,7 @@ export default {
   }
   &--match3 {
     fill: #f7f9fa;
-    filter: drop-shadow(0 0px 3px rgb(255, 255, 255, 0.6));
+    filter: drop-shadow(0 0px 5px rgb(255, 255, 255, 1));
   }
 }
 </style>

@@ -32,43 +32,44 @@ export default {
   width: 85%;
   height: 85%;
   padding: 8%;
-  fill: #2bbe57;
+  fill: #129f12;
 
   &--match2 {
     fill: #13cc13;
     filter: drop-shadow(0 0px 3px rgb(255, 255, 255, 0.4));
 
     & #path2 { 
-      animation: svgA_2 0.5s 0s 1 normal forwards;
+      animation: mouthMovement var(--animation-configuration);
     }
 
     & #circle4-3 { 
-      animation: svgA_3 0.5s 0s 1 normal forwards;
+      animation: svgA_3 var(--animation-configuration);
     }
 
     & #circle4-3-6 { 
-      animation: svgA_4 0.5s 0s 1 normal forwards;
+      animation: svgA_4 var(--animation-configuration);
     }
   }
 
   &--match3 {
     fill: rgb(141, 224, 46);
-    filter: drop-shadow(0 0px 3px rgba(236, 253, 0, 0.6));
+    filter: drop-shadow(0 0px 3px rgba(236, 253, 0, 1));
+    transform: scale(1.3, 1.3);
 
     & #path2 { 
-      animation: svgA_2 0.5s 0s 1 normal forwards;
+      animation: mouthMovement var(--animation-configuration);
     }
 
     & #circle4-3 { 
-      animation: svgA_3 0.5s 0s 1 normal forwards;
+      animation: svgA_3 var(--animation-configuration);
     }
 
     & #circle4-3-6 { 
-      animation: svgA_4 0.5s 0s 1 normal forwards;
+      animation: svgA_4 var(--animation-configuration);
     }
   }
 
-  @keyframes svgA_2 {
+  @keyframes mouthMovement {
     0.0000% {
       d:path('m 120.9,252.5 c 23.3,4.2 33.8,25.2 38.2,39 -16.5,26.8 -25.2,57 -25.2,87.5 v 0 206.4 0.5 l 0.1,0.6 c 0,0 -4.66277,9.54573 -19.96377,18.04476 -15.157425,8.41929 -8.96253,26.79573 20.72397,34.50799 45.18464,9.88222 76.37286,-2.5236 119.5533,4.45276 34.07634,8.16167 73.90663,8.00328 101.68347,-0.22273 22.15152,-6.59077 79.10589,9.47518 107.64014,-4.61232 22.1211,-10.92129 32.54497,-22.87005 12.27685,-35.04519 C 456.3648,591.88201 459.6,586.2 458.9,584.5 V 379.1 c 0,-41.1 -9,-73.5 -27.6,-99 8.3,-15.7 25.4,-24.7 47.5,-24.8 30.96687,-5.10497 21.3394,-45.53781 -1.7,-44.5 -30,1.2 -55.4,14.1 -72.2,36.9 -29.3,-23 -65.8,-35.7 -103.2,-35.7 -40.8,0 -79.8,14.8 -110.5,41.9 -15.2,-25.6 -39.8,-42 -68.6,-45.4 -31.105829,3.08704 -25.538208,43.64227 -1.7,44 z m 213,276.3 h -57.7 c -6.4,0 -11.5,0.8 -11.5,-5.5 v -5.6 c 0,-6.4 5.2,-5.5 11.5,-5.5 h 57.7 c 6.4,0 11.5,-0.8 11.5,5.5 v 5.6 c 0,6.3 -5.2,5.5 -11.5,5.5 z m 43.2,-84.7 c -25.8,0 -46.7,-20.9 -46.7,-46.7 0,-25.8 20.9,-46.7 46.7,-46.7 25.8,0 46.7,20.9 46.7,46.7 -0.1,25.8 -21,46.7 -46.7,46.7 z m -79.1,-88 c -25.8,0 -46.7,-20.9 -46.7,-46.7 0,-25.8 20.9,-46.7 46.7,-46.7 25.8,0 46.7,20.9 46.7,46.7 0,25.8 -20.9,46.7 -46.7,46.7 z m -70.2,-5.3 c 25.8,0 46.7,20.9 46.7,46.7 0,25.8 -20.9,46.7 -46.7,46.7 -25.8,0 -46.7,-20.9 -46.7,-46.7 0,-25.8 20.9,-46.7 46.7,-46.7 z');
     }
